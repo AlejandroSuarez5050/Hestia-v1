@@ -11,6 +11,7 @@ application.yml
 docker-compose.yml
 docker-compose.*.yml
 !docker-compose.example.yml
+!docker-compose.deploy.example.yml
 
 # Build/Cobertura
 .nyc_output/
