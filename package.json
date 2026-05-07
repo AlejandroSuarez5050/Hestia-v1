@@ -1,0 +1,45 @@
+{
+  "name": "hestia",
+  "version": "0.1.0",
+  "description": "Bot de musica personal para Discord con Lavalink y cola avanzada.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "commands:register": "node src/discord/register-commands.js",
+    "spotify:auth:url": "node src/discord/spotify-auth-url.js",
+    "spotify:auth:exchange": "node src/discord/spotify-auth-exchange.js",
+    "spotify:auth:local": "node src/discord/spotify-auth-local.js",
+    "docker:build": "docker build -t hestia:latest .",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "check": "node scripts/check-syntax.js"
+  },
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "music",
+    "music-bot",
+    "bot",
+    "lavalink",
+    "youtube",
+    "spotify",
+    "docker",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "repository": {},
+  "bugs": {},
+  "homepage": "",
+  "engines": {
+    "node": ">=24.15.0",
+    "npm": ">=10.9.2"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2",
+    "lavalink-client": "^2.10.1"
+  }
+}

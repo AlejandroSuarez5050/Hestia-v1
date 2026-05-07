@@ -1,0 +1,44 @@
+# Dependencias
+node_modules/
+
+# Entorno
+.env
+.env.*
+!.env.example
+
+# Git
+.git/
+.gitattributes
+.gitignore
+
+# IDE/Editor
+.idea/
+.vscode/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build/Test
+.nyc_output/
+coverage/
+dist/
+test/
+tests/
+
+# Temporales/SO
+*.swo
+*.swp
+.DS_Store
+Thumbs.db
+
+# Docker/Compose locales
+compose*.yml
+docker-compose*.yml
+!docker-compose.example.yml
+application.yml
+!application.example.yml
