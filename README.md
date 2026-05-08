@@ -60,6 +60,8 @@ El repositorio incluye plantillas publicas. Los archivos reales de entorno y Doc
 docker compose up -d --build
 ```
 
+Si vas a desplegar desde GitHub Actions (imagen en GHCR), usa como base `docker-compose.deploy.example.yml` en tu servidor privado.
+
 Archivos privados ignorados por Git:
 
 - `.env`
@@ -181,14 +183,32 @@ Los workflows de deploy esperan que tu servidor ya tenga su propio `docker-compo
 Configura estos secretos en los environments `dev` y `production`:
 
 - `SERVER_HOST`
+- `SERVER_PORT`
 - `SERVER_USER`
 - `SERVER_SSH_KEY`
 - `DEPLOY_PATH`
+
+`SERVER_PORT` es obligatorio en los workflows de deploy (normalmente `22`).
 
 Ejemplos de `DEPLOY_PATH`:
 
 - Dev: `/opt/hestia/dev`
 - Prod: `/opt/hestia/prod`
+
+Ejemplo de secretos por environment:
+
+- `dev`
+  - `SERVER_HOST=tu-servidor.com`
+  - `SERVER_PORT=22`
+  - `SERVER_USER=deploy`
+  - `DEPLOY_PATH=/opt/hestia/dev`
+- `production`
+  - `SERVER_HOST=tu-servidor.com`
+  - `SERVER_PORT=22`
+  - `SERVER_USER=deploy`
+  - `DEPLOY_PATH=/opt/hestia/prod`
+
+Para que `docker compose pull bot` funcione, el `docker-compose.yml` privado del servidor debe usar imagen de GHCR (no `build` local). Puedes basarte en `docker-compose.deploy.example.yml`.
 
 El deploy ejecuta en el servidor:
 

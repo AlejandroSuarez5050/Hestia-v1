@@ -60,9 +60,20 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
+          ssh-keyscan -p "${{ secrets.SERVER_PORT }}" -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: |
+          ssh -p "${{ secrets.SERVER_PORT }}" "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" \
+            "whoami && hostname && docker ps"
 
       - name: Deploy stack
         run: |
-          ssh "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" \
-            "cd '${{ secrets.DEPLOY_PATH }}' && docker compose pull bot && docker compose up -d && docker compose exec -T bot npm run commands:register"
+          ssh -p "${{ secrets.SERVER_PORT }}" "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" "
+            set -e
+            cd '${{ secrets.DEPLOY_PATH }}'
+            docker compose pull bot
+            docker compose up -d
+            docker compose ps
+            docker compose exec -T bot npm run commands:register
+          "
