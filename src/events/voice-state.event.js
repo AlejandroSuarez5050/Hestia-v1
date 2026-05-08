@@ -5,10 +5,14 @@ const timers = new Map();
 
 export default {
   name: 'voiceStateUpdate',
-  async execute(client, oldState) {
+  async execute(client, oldState, newState) {
     const guildId = oldState.guild.id;
     const player = hestiaMusic.playerService.getPlayer(client, guildId);
     if (!player || !player.voiceChannelId) return;
+
+    const changedFrom = oldState.channelId === player.voiceChannelId;
+    const changedTo = newState.channelId === player.voiceChannelId;
+    if (!changedFrom && !changedTo) return;
 
     const channel = oldState.guild.channels.cache.get(player.voiceChannelId);
     if (!channel) return;
@@ -27,6 +31,7 @@ export default {
       timers.delete(guildId);
       const freshPlayer = hestiaMusic.playerService.getPlayer(client, guildId);
       if (freshPlayer) {
+        await hestiaMusic.deletePlayerMessage(client, guildId).catch(() => {});
         await freshPlayer.destroy().catch(() => {});
         hestiaMusic.guildState.clear(guildId);
       }
