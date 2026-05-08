@@ -309,13 +309,21 @@ lavalink.on('trackEnd', async (player, track, reason) => {
 
   lavalink.on('queueEnd', async (player) => {
     const state = hestiaMusic.guildState.get(player.guildId);
-    if (!state.autoplay) {
-      logger.info(`Cola finalizada en guild ${player.guildId}`);
-      state.currentTrackInfo = null;
-      await hestiaMusic.deletePlayerMessage(client, player.guildId).catch(() => {});
+    if (state.autoplay) {
+      await ensureAutoplayQueue(client, player, 'queueEnd');
+    }
+
+    const hasCurrent = Boolean(player.queue.current);
+    const hasQueued = (player.queue.tracks?.length ?? 0) > 0;
+    if (hasCurrent || hasQueued) {
       return;
     }
-    await ensureAutoplayQueue(client, player, 'queueEnd');
+
+    logger.info(`Cola finalizada en guild ${player.guildId}`);
+    state.currentTrackInfo = null;
+    await hestiaMusic.deletePlayerMessage(client, player.guildId).catch(() => {});
+    await player.destroy().catch(() => {});
+    hestiaMusic.guildState.clear(player.guildId);
   });
 
   lavalink.nodeManager.on('connect', () => logger.info('Lavalink conectado'));
